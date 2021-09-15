@@ -38,9 +38,7 @@ Request.isRequest = (data) => {
 Request.parse = (data) => {
     if(data && Request.isRequest(data)){
         data = JSON.parse(data);
-        if(Request.isRequest(data)){
-            return new Request(data.message, data.type, data.user, data.room);
-        }
+        return new Request(data.message, data.type, data.user, data.room);
     }
 }
 

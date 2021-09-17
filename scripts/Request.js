@@ -27,8 +27,7 @@ Request.isRequest = (data) => {
             return false;
         }
 
-        return parsedData.hasOwnProperty('type') &&  parsedData.hasOwnProperty('message')
-            && parsedData.hasOwnProperty('user') && parsedData.hasOwnProperty('room');
+        return parsedData.hasOwnProperty('message');
 
     } catch (e) {
         return false;

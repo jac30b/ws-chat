@@ -2,18 +2,32 @@ const urlParser = require('url-parse');
 const qs = require('qs');
 const {Auth} = require('./Auth');
 
+// TODO: Move to seperate file
+const { MongoClient } = require('mongodb');
+const url = 'mongodb://localhost:27017';
+const client = new MongoClient(url);
+const dbName = 'ws-chat';
+
 function Router(){}
 
-Router.route = (url, data) => {
+Router.route = async (url, data) => {
     const parsedUrl = new urlParser(url);
-    console.log(parsedUrl);
+    const parsedParams = qs.parse(parsedUrl.query,  {ignoreQueryPrefix: true});
     if(parsedUrl.pathname == '/login'){
-        //TODO: Generate token and store it.
-        //TODO: Move code to separate file.
+        return await Auth.generateToken(parsedParams.user, parsedParams.roomID);
+    }
 
-        const parsedParams = qs.parse(parsedUrl.query,  {ignoreQueryPrefix: true});
-        return Auth.generateToken(parsedParams.user);
-    }   
+    if(parsedUrl.pathname == '/getRooms'){
+        // TODO: Move to seperate file
+        
+        await client.connect();
+        const db = client.db(dbName);
+        const collection = db.collection('rooms');
+        
+        const rooms = await collection.find({}).toArray();
+        const roomsIDs = rooms.map((x) => x.roomID);
+        return JSON.stringify(roomsIDs);
+    }
 }
 
 module.exports.Router = Router;

@@ -54,8 +54,11 @@ class MyServer {
             ws.on('message',async  function incoming(message){
                 try {
                     const data = {body: message.toString(), roomID: ws.roomID, user:ws.user}
-                    const req = Parser.parse(data)
-                    await MyServer.broadcastMessage(wss, req.message, req.roomID);
+                    Parser.parse(data).then(async (req) => {
+                        await MyServer.broadcastMessage(wss, req.message, req.roomID);
+                    }).catch((err) => {
+                        console.error(err);
+                    });
                 } catch (err) {
                     console.error(err);
                 }

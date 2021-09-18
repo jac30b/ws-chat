@@ -1,6 +1,6 @@
 const urlParser = require('url-parse');
 const qs = require('qs');
-const {Auth} = require('./Auth');
+
 
 class Router {
     constructor() {

@@ -54,10 +54,16 @@ class MyServer {
             }
 
             ws.roomID = dataFromToken.roomID;
-
+            ws.user = dataFromToken.user;
             ws.on('message',async  function incoming(message){
-                const req = Parser.parse(message);
-                await MyServer.broadcastMessage(wss, req.message, ws.roomID);
+                try {
+                    const data = {body: message.toString(), roomID: ws.roomID, user:ws.user}
+                    const req = Parser.parse(data)
+                    await MyServer.broadcastMessage(wss, req.message, req.roomID);
+                } catch (err) {
+                    console.error(err);
+                }
+
 
             });
         });

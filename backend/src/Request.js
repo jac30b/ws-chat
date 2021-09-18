@@ -1,14 +1,19 @@
 class Request {
-    constructor(message, user, room) {
+    constructor(message, user, roomID) {
         this.message = message;
         this.user = user;
-        this.room = room;
+        this.roomID = roomID;
     }
 
-    parse(data) {
-        if (data && Request.isRequest(data)) {
-            data = JSON.parse(data);
-            return new Request(data.message, data.type, data.user, data.room);
+    static parse(data) {
+        if (data && Request.isRequest(data.body)) {
+            try {
+                const {message} = JSON.parse(data.body);
+                return new Request(message, data.user, data.roomID);
+            } catch (err) {
+                throw err;
+            }
+
         }
     }
 

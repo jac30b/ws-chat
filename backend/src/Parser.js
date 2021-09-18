@@ -2,8 +2,8 @@ const {Request} = require('./Request');
 
 class Parser {
     static parse(data) {
-        if(Request.isRequest(data)){
-            return this.parse(data);
+        if(Request.isRequest(data.body)){
+            return Request.parse(data);
         }
     }
 }

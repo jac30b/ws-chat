@@ -5,6 +5,7 @@ const qs = require("qs");
 const jwt = require("jsonwebtoken");
 const {isJwtExpired} = require("jwt-check-expiration");
 const {Parser} = require('./Parser');
+const {Auth} = require('./Auth');
 
 class MyServer {
     constructor(router) {
@@ -41,20 +42,15 @@ class MyServer {
             const parsedUrl = new urlParser(req.url);
             const parsedParams = qs.parse(parsedUrl.query, {ignoreQueryPrefix: true});
 
-            if(!parsedParams.token){
-                ws.send('No token provided');
+            try {
+                const userData = Auth.validateData(parsedParams.token);
+                ws.roomID = userData.roomID;
+                ws.user = userData.user;
+            } catch (err) {
+                ws.send(err.message);
                 return ws.terminate();
             }
 
-            const dataFromToken = jwt.verify(parsedParams.token, 'jeeezzz');
-
-            if(isJwtExpired(parsedParams.token)){
-                ws.send('Token expired');
-                return ws.terminate();
-            }
-
-            ws.roomID = dataFromToken.roomID;
-            ws.user = dataFromToken.user;
             ws.on('message',async  function incoming(message){
                 try {
                     const data = {body: message.toString(), roomID: ws.roomID, user:ws.user}
@@ -68,7 +64,6 @@ class MyServer {
             });
         });
         server.listen(port);
-
     }
 
     static async broadcastMessage(wss, message, roomID) {

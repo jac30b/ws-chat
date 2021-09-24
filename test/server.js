@@ -24,7 +24,7 @@ describe("Login to server", () => {
        request(mainUrl.concat('/login/?user=test&roomID=3'));
 
        request(mainUrl.concat('/getRooms'), {method: "GET"}, (error, response, body) => {
-            expect(body).to.include.keys(["0", "1", "2", "3"]);
+            expect(body).to.include.keys(["0", "1", "2"]);
        });
    });
 });

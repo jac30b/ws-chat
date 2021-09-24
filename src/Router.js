@@ -15,7 +15,7 @@ class Router {
         const path = new urlParser(req.url);
         const parsedParams = qs.parse(path.query,  {ignoreQueryPrefix: true});
         for(let {method, urlPattern, cb} of this.routes){
-            if(urlPattern.exec(path.pathname) && method === req.method) {
+            if(urlPattern === path.pathname && method === req.method) {
                 return cb(parsedParams, req);
             }
         }

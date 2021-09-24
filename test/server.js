@@ -3,7 +3,6 @@ const request = require("request");
 const jwt = require("jsonwebtoken");
 const {WebSocket} = require('ws')
 const {debug_mode} = require("redis");
-const {MongoClient} = require('mongodb');
 
 const debug = process.argv.includes('-debug');
 

@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken');
-const {format} = require('date-fns');
 const {Room} = require('./Room');
 const {isJwtExpired} = require("jwt-check-expiration");
 
@@ -13,10 +12,10 @@ class Auth {
         });
     }
 
-    static validateData(token){
-        if(token) {
+    static validateData(token) {
+        if (token) {
             const dataFromToken = jwt.verify(token, 'jeeezzz');
-            if (dataFromToken.roomID && dataFromToken.user && !isJwtExpired(token)){
+            if (dataFromToken.roomID && dataFromToken.user && !isJwtExpired(token)) {
                 return dataFromToken;
             } else {
                 throw new Error("Wrong data in token provided");

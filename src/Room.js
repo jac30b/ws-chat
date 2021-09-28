@@ -1,15 +1,16 @@
 const {MongoClient} = require('mongodb');
 
 class Room {
-     constructor() {
+    constructor() {
         const url = 'mongodb://localhost:27017';
         this.client = new MongoClient(url);
         this.dbName = 'ws-chat';
     }
-    async addRoom(roomID){
-         if(roomID === null || roomID === undefined) {
-             throw new Error("roomID can not be null");
-         }
+
+    async addRoom(roomID) {
+        if (roomID === null || roomID === undefined) {
+            throw new Error("roomID can not be null");
+        }
         await this.client.connect();
         const db = this.client.db(this.dbName);
         this.collection = db.collection('rooms');

@@ -1,6 +1,7 @@
 class Request {
-    constructor(message, user, roomID) {
+    constructor(message, user, roomID, method) {
         this.message = message;
+        this.method = method;
         this.user = user;
         this.roomID = roomID;
     }
@@ -8,8 +9,8 @@ class Request {
     static parse(data) {
         if (data && Request.isRequest(data.body)) {
             try {
-                const {message} = JSON.parse(data.body);
-                return new Request(message, data.user, data.roomID);
+                const {message, method} = JSON.parse(data.body);
+                return new Request(message, data.user, data.roomID, method);
             } catch (err) {
                 throw err;
             }
@@ -39,8 +40,7 @@ class Request {
                 return false;
             }
 
-            return parsedData.hasOwnProperty('message');
-
+            return (parsedData.hasOwnProperty('message') || parsedData.hasOwnProperty('roomID')) && parsedData.hasOwnProperty('method');
         } catch (e) {
             return false;
         }

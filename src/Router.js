@@ -1,6 +1,5 @@
-const urlParser = require('url-parse');
-const qs = require('qs');
-
+const urlParser = require("url-parse");
+const qs = require("qs");
 
 class Router {
     constructor() {
@@ -8,13 +7,13 @@ class Router {
     }
 
     addRoute(method, urlPattern, cb) {
-        this.routes.push({method, urlPattern, cb})
+        this.routes.push({ method, urlPattern, cb });
     }
 
     resolve(req) {
         const path = new urlParser(req.url);
-        const parsedParams = qs.parse(path.query, {ignoreQueryPrefix: true});
-        for (let {method, urlPattern, cb} of this.routes) {
+        const parsedParams = qs.parse(path.query, { ignoreQueryPrefix: true });
+        for (let { method, urlPattern, cb } of this.routes) {
             if (method === req.method && urlPattern === path.pathname) {
                 return cb(parsedParams, req);
             }

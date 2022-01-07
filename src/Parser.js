@@ -1,4 +1,4 @@
-const {Request} = require('./Request');
+const { Request } = require("./Request");
 
 class Parser {
     static parse(data) {
@@ -9,9 +9,7 @@ class Parser {
                 reject("Wrong request.");
             }
         });
-
     }
 }
 
 module.exports.Parser = Parser;
-

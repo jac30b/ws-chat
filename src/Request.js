@@ -9,16 +9,17 @@ class Request {
     static parse(data) {
         if (data && Request.isRequest(data.body)) {
             try {
-                const {message, method} = JSON.parse(data.body);
+                const { message, method } = JSON.parse(data.body);
                 return new Request(message, data.user, data.roomID, method);
             } catch (err) {
                 throw err;
             }
-
         }
     }
 
     static isRequest(data) {
+        const allowedMethods = ["sendMessage"];
+
         const getDepth = (tree) => {
             let depth = 0;
             if (tree.children) {
@@ -30,7 +31,7 @@ class Request {
                 });
             }
             return 1 + depth;
-        }
+        };
 
         try {
             const parsedData = JSON.parse(data);
@@ -39,8 +40,13 @@ class Request {
             if (depth !== 1) {
                 return false;
             }
-
-            return (parsedData.hasOwnProperty('message') || parsedData.hasOwnProperty('roomID')) && parsedData.hasOwnProperty('method');
+            console.log(parsedData.method);
+            return (
+                (parsedData.hasOwnProperty("message") ||
+                    parsedData.hasOwnProperty("roomID")) &&
+                parsedData.hasOwnProperty("method") &&
+                allowedMethods.includes(parsedData.method)
+            );
         } catch (e) {
             return false;
         }
